@@ -3,56 +3,44 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import TodoForm from './TodoForm';
-import Todo from './Todo';
+import Todos from './Todos';
+import {v4 as uuidv4} from 'uuid';
 
 interface TodoInterface {
-	trim: any; // ???
-  index: string;
+  id: string;
   text: string;
-  isCompleted: boolean;
-	length: number;
+  completed: boolean;
 };
 
 const TodoModel = () => {
 	const [todos, setTodos] = React.useState<TodoInterface[]>([]);
-	const [newText, setNewText] = useState("");
-	const [isEditing, setEditing] = useState(false);
+	const [isEditing, setEditing] = useState(null);
 
-  const addTodo = (text: TodoInterface) => {
-  	setTodos([...todos, text]);
+  const addTodo = (text: string) => {
+  	setTodos([...todos, {text: text, id: uuidv4(), completed: false }]);
   };
 
-	const deleteTodo = (index: number) => {
-		const newTodos = todos.filter((_, todoIndex) => todoIndex !== index);
+	const deleteTodo = (id: string) => {
+		const newTodos = todos.filter((todo) => todo.id !== id);
 		setTodos(newTodos);
   };
 
-	function editTask(index: number, newText: any) {
-		const editedTaskList = todos.map((todo:  any) => {
-			if (index === todo.index) {
-				todo = "";
-				return  [...todo, newText] ;
+	function editTodo(id: string, newText: any) {
+		const editedTodoList = todos.map((todo:  any) => {
+			if (id === todo.id) {
+				return  {...todo, text: newText};
 			};
 			return todo;
 		});
-		setTodos(editedTaskList);
-	};
-
-
-
-	const handleSubmit = (e: any, value: string) => {
-		e.preventDefault();
-		editTask(e.index, newText);
-		setNewText(value);
-		setEditing(false);
+		setTodos(editedTodoList);
 	};
 
   return (
 		<>
 			<h3>Todo List</h3>
 			<TodoForm
-				saveTodo={(todoText: TodoInterface) => {
-					const trimmedText = todoText.trim();
+				saveTodo={(todo: string) => {
+					const trimmedText = todo.trim();
 					if (trimmedText.length > 0) {
 						addTodo(trimmedText);
 					}
@@ -75,7 +63,7 @@ const TodoModel = () => {
 				</ButtonGroup>
     	</Box>
 			<p>{todos.length} tasks remaining</p>
-			<Todo todos={todos} setTodos={setTodos} deleteTodo={deleteTodo} handleSubmit={handleSubmit} setEditing={setEditing} isEditing={isEditing} newText={newText} setNewText={setNewText}/>
+			<Todos todos={todos} editTodo={editTodo} deleteTodo={deleteTodo} setEditing={setEditing} isEditing={isEditing}/>
 		</>
   );
 };
