@@ -10,7 +10,7 @@ const TodoForm: any = ({ saveTodo }:any) => {
     setValue(e.target.value)
   };
 
-  const reset = () => setValue('')
+  const reset = () => setValue('');
 
   return (
 		<Box

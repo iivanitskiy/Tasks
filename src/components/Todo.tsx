@@ -1,47 +1,56 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Checkbox from '@mui/material/Checkbox';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import Button from '@mui/material/Button';
 
-const Todo = ({ todos, deleteTodo, checkedToggler, handleSubmit, isEditing, setEditing, newText, setNewText }:any) => {
-	
-	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  	setNewText(e.target.value);
-	};	
+const Todo = ({ todo, editTodo, deleteTodo, checkboxToggler }:any) => {
+	const [todoText, setTodoText] = useState(todo.title);
+	const [editIndex, setEditIndex] = useState(false);
 
-  return(
-				<ul>
-			{todos.map((note:string, index:any) => ( 
-				<li 
-					// eslint-disable-next-line react/no-array-index-key
-					key={index} 
-				>
-					
-					<div>
-						<Checkbox inputProps={{ 'aria-label': 'uncontrolled-checkbox' }} onClick={checkedToggler}/>
-						<strong style={{paddingRight: 20}}>{note}</strong>
-					</div>
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTodoText(e.target.value)
+  };
 
-					{!isEditing ? (<ButtonGroup variant="outlined" aria-label="outlined button group">
-						<Button onClick={() => setEditing(true)}>Edit</Button>
-						<Button onClick={() => deleteTodo(index)}>Delete</Button>
-					</ButtonGroup>) :
-					(<ButtonGroup variant="outlined" aria-label="outlined button group">
-						<input
-							id={index}
-							className="todo-text"
-							type="text"
-							value={newText}
-							onChange={handleChange}
-						/>
-						<Button onClick={() => setEditing(false)}>Cancel</Button>
-						<Button onClick={handleSubmit}>Save</Button>
-					</ButtonGroup>)}
-				</li>
-			))
-			}
-		</ul>
-  )
+	const handleSubmit = () => {
+		editTodo(todo.id, todoText);
+		setEditIndex(false);
+	};
+
+	const reset = () => {
+		setTodoText(todo.title);
+		setEditIndex(false);
+	};
+
+	const check = () => {
+		checkboxToggler(todo.id);
+	};
+
+	return (
+		<li>					
+			{!editIndex && <div>
+				<Checkbox 
+					inputProps={{ 'aria-label': 'uncontrolled-checkbox' }} 
+					checked={todo.completed ? true : false}
+					onClick={check}/>
+				<strong style={{paddingRight: 20}}>{todoText}</strong>
+			</div>}
+			{!editIndex ? (<ButtonGroup variant="outlined" aria-label="outlined button group">
+				<Button onClick={() => setEditIndex(todo.id)}>Edit</Button>
+				<Button onClick={() => deleteTodo(todo.id)}>Delete</Button>
+			</ButtonGroup>) :
+			(<ButtonGroup variant="outlined" aria-label="outlined button group">
+				<input
+					id={todo.id}
+					className="todo-text"
+					type="text"
+					value={todoText}
+					onChange={onChange}
+				/>
+				<Button onClick={reset}>Cancel</Button>
+				<Button onClick={handleSubmit}>Save</Button>
+			</ButtonGroup>)}
+		</li>
+	)
 }
 
-export default Todo;
+export default Todo
