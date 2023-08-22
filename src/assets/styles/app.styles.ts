@@ -36,3 +36,24 @@ export const SLogo = styled.img`
 export const SLink = styled.a`
   color: #61dafb;
 `
+export const Wrapper = styled.section`
+  padding: 4em;
+  background: papayawhip;
+`
+
+export const Container = styled.div`
+  display: flex;
+	justify-content: space-evenly;
+	align-items: center;
+  padding: 15px;
+  background-color: #fff;
+  border-radius: 5px;
+`
+
+export const Title = styled.h1`
+  font-weight: 300;
+`
+export const Text = styled.p`
+  font-size: 16px;
+`
+

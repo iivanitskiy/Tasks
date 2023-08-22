@@ -1,0 +1,10 @@
+.createBtn {
+	font-size: 35px;
+	cursor: pointer;
+	height: 50px;
+	width: 50px;
+	border-radius: 50%;
+	position: fixed;
+	right: 100px;
+	bottom: 100px;
+}

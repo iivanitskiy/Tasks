@@ -1,12 +1,16 @@
-import React, { useState } from 'react';
+import { ChangeEvent, FC, useState } from 'react';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 
-const TodoForm: any = ({ saveTodo }:any) => {
+interface Props {
+	saveTodo: (value: string) => void;
+};
+
+const TodoForm: FC<Props> = ({ saveTodo }): JSX.Element | null => {
   const [value, setValue] = useState('');
 
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value)
   };
 
@@ -23,7 +27,6 @@ const TodoForm: any = ({ saveTodo }:any) => {
 		>
 			<TextField 
 				id="outlined-size-small"
-				defaultValue="Small"
 				size="small"
 				label="New todo" 
 				variant="outlined"         

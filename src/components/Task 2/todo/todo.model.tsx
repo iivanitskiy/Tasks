@@ -1,31 +1,30 @@
-import React, {useState, useEffect} from 'react';
+import { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import TodoForm from './TodoForm';
 import Todos from './Todos';
 import {v4 as uuidv4} from 'uuid';
-import list from '../data/list.json';
+import list from '../../../data/todos.list.json';
 
-interface TodoInterface {
+interface Todo {
   id: string;
   title: string;
   completed: boolean;
 };
 
 enum Filter{
-  All = 'All',
-  Active = 'Active',
-  Completed = 'Completed'
+  ALL = 'ALL',
+  ACTIVE = 'ACTIVE',
+  COMPLETED = 'COMPLETED'
 };
 
-const TodoModel = () => {
-	const [todos, setTodos] = useState<TodoInterface[]>(JSON.parse(localStorage.getItem("TODOS") || JSON.stringify(list)));
-	const [filter, setFilter] = useState(Filter.All);
-	const [isEditing, setEditing] = useState(null);
-
+const TodoModel = (): JSX.Element | null => {
+	const [todos, setTodos] = useState<Todo[]>(JSON.parse(localStorage.getItem("TODOS") || JSON.stringify(list)));
+	const [filter, setFilter] = useState(Filter.ALL);
+	
   const addTodo = (text: string) => {
-  	setTodos([...todos, {title: text, id: uuidv4(), completed: false }]);
+  	setTodos([...todos, {title: text, id: String(uuidv4()), completed: false }]);
   };
 
 	const deleteTodo = (id: string) => {
@@ -34,7 +33,7 @@ const TodoModel = () => {
   };
 
 	const editTodo = (id: string, newTitle: string) => {
-		const editedTodoList = todos.map((todo: TodoInterface) => {
+		const editedTodoList = todos.map((todo: Todo) => {
 			if (id === todo.id) {
 				return  {...todo, title: newTitle};
 			};
@@ -50,17 +49,17 @@ const TodoModel = () => {
    setTodos(mapped);
   };
 
-	function filteredTodos() {
+	const filteredTodos = () => {
 		switch (filter) {
-			case Filter.Active:
-				return todos.filter((todo: TodoInterface) => {
+			case Filter.ACTIVE:
+				return todos.filter((todo: Todo) => {
 					if (todo.completed === false) {
 						return todo;
 					};
 					return null;
 				});
-			case Filter.Completed:
-				return todos.filter((todo: TodoInterface) => {
+			case Filter.COMPLETED:
+				return todos.filter((todo: Todo) => {
 					if (todo.completed === true) {
 						return todo;
 					};
@@ -71,7 +70,7 @@ const TodoModel = () => {
   	}
 	};
 
-	function switchFilter(filter: Filter) {
+	const switchFilter = (filter: Filter) => {
 		return () => setFilter(filter);
 	};
 
@@ -108,13 +107,13 @@ const TodoModel = () => {
 				}}
     	>
 				<ButtonGroup variant="outlined" aria-label="outlined button group">
-					<Button onClick={switchFilter(Filter.All)}>Show All Tasks</Button>
-					<Button onClick={switchFilter(Filter.Active)}>Show Active Tasks</Button>
-					<Button onClick={switchFilter(Filter.Completed)}>Show Completed Tasks</Button>
+					<Button onClick={switchFilter(Filter.ALL)}>Show All Tasks</Button>
+					<Button onClick={switchFilter(Filter.ACTIVE)}>Show Active Tasks</Button>
+					<Button onClick={switchFilter(Filter.COMPLETED)}>Show Completed Tasks</Button>
 				</ButtonGroup>
     	</Box>
 			<p>{todos.length} tasks remaining</p>
-			<Todos todos={filteredTodos()} editTodo={editTodo} deleteTodo={deleteTodo} setEditing={setEditing} isEditing={isEditing} checkboxToggler={checkboxToggler}/>
+			<Todos todos={filteredTodos()} editTodo={editTodo} deleteTodo={deleteTodo} checkboxToggler={checkboxToggler} />
 		</>
   );
 };

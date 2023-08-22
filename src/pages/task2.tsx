@@ -1,5 +1,4 @@
-import React from 'react';
-import TodoModel from "../components/todo.model";
+import TodoModel from "../components/Task 2/todo/todo.model";
 
 const Task2 = () => {
   return (

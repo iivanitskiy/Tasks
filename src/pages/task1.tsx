@@ -1,7 +1,6 @@
-import React from 'react';
 import { SHeader} from "../assets/styles/app.styles";
-import Timer from "../components/Timer";
-import Countdown from "../components/Countdown";
+import Timer from "../components/Task 1/countdown+timer/Timer";
+import Countdown from "../components/Task 1/countdown+timer/Countdown";
 
 const Task1 = () => {
   return (

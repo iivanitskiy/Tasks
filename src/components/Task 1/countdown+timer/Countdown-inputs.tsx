@@ -1,4 +1,4 @@
-import React, {useState,useEffect} from 'react';
+import { useState,useEffect, ChangeEvent, FC } from 'react';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 
@@ -8,9 +8,9 @@ interface Props {
   isActive: boolean;
 };
 
-const CountDownInputs: React.FC<Props> = ({counter, setCounter, isActive}) => {
-  const [minutes, setMinutes] = useState<number>(Math.floor(counter / 60));
-  const [seconds, setSeconds] = useState<number>(Math.floor(counter % 60));
+const CountDownInputs: FC<Props> = ({counter, setCounter, isActive}): JSX.Element | null => {
+  const [minutes, setMinutes] = useState(Math.floor(counter / 60));
+  const [seconds, setSeconds] = useState(Math.floor(counter % 60));
 
   useEffect(() => {
     if (counter > 720 * 60) {
@@ -23,20 +23,21 @@ const CountDownInputs: React.FC<Props> = ({counter, setCounter, isActive}) => {
     }
   }, [counter, setCounter]);
 
-  const onChangeMin = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onChangeMin = (e: ChangeEvent<HTMLInputElement>) => {
   	setCounter(Number(e.target.value) * 60 + seconds);
 	};
 	
-  const onChangeSec = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onChangeSec = (e: ChangeEvent<HTMLInputElement>) => {
     if (Number(e.target.value) < 0) {
       setCounter(counter - 1);
     };
   	setCounter(Number(e.target.value) + minutes * 60);
 	};
 
-   const onChangeSlider = (e: React.ChangeEvent<HTMLInputElement>) => {
+   const onChangeSlider = (e: ChangeEvent<HTMLInputElement>) => {
   	setCounter(Number(e.target.value));
 	};
+  
   return (
     <>
       <Box

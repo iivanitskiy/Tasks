@@ -1,36 +1,41 @@
-import React, {useState, useRef, useMemo, useEffect, useCallback} from 'react';
+import { useState, useRef, useMemo, useEffect } from 'react';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import Container from '@mui/material/Container';
 import CountDownInputs from './Countdown-inputs';
 
-const Countdown = () => {
-  const [time, setTime] = useState<number>(0);
-  const [counter, setCounter] = useState<number>(0);
-  const [isActive, setIsActive] = useState<boolean>(false);
+function formatTime(time: number): string {
+  return `${Math.floor(time / 60).toString().padStart(2, '0')}:${Math.floor(time % 60).toString().padStart(2, '0')}`;
+};
+
+function play() {
+  let audio = new Audio('http://commondatastorage.googleapis.com/codeskulptor-demos/pyman_assets/eatpellet.ogg');
+  audio.play();
+};
+
+const Countdown = (): JSX.Element | null => {
+  const [time, setTime] = useState(0);
+  const [counter, setCounter] = useState(0);
+  const [isActive, setIsActive] = useState(false);
 
   useEffect(() => {
     setTime(counter);
   }, [counter]);
 
-  const progress = useCallback(() => {
+  const timerRef = useRef<null | NodeJS.Timeout>();
+	
+	const formattedTime = useMemo(() => 
+    formatTime(time), [time]
+  );
+
+  const progress = useMemo(() => {
     if (time === 0) {
       return 100;
     } else {
       return Math.round((time / counter) * 100);
     }
   }, [counter, time]);
-
-  const timerRef = useRef<any>(0); // ??? any
-	
-  function formatTime(time:number): string {
-    return `${Math.floor(time / 60).toString().padStart(2, '0')}:${Math.floor(time % 60).toString().padStart(2, '0')}`;
-  };
-
-	const formattedTime = useMemo(() => 
-    formatTime(time), [time]
-  );
 
   const start = () => {
     setIsActive(true);
@@ -40,7 +45,7 @@ const Countdown = () => {
   };
 
   const pause = () => {
-    clearInterval(timerRef.current);
+    clearInterval(timerRef.current as NodeJS.Timeout);
     setIsActive(false);
   };
 
@@ -49,11 +54,6 @@ const Countdown = () => {
     setTime(counter);
     pause();
   };
-
-  function play() {
-    let audio = new Audio('http://commondatastorage.googleapis.com/codeskulptor-demos/pyman_assets/eatpellet.ogg');
-    audio.play();
-  }
 
   if (isActive && time === 0) {
     pause();
@@ -72,7 +72,7 @@ const Countdown = () => {
 				}
 				<Button variant="contained" color="error" onClick={reset}>Сброс</Button>
 			</ButtonGroup>
-      <div>{progress()}%</div>
+      <div>{progress}%</div>
       <CountDownInputs counter={counter} setCounter={setCounter} isActive={isActive}/>
 		</Container>	    
   );
