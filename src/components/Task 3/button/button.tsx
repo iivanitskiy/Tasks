@@ -1,7 +1,7 @@
-import { FC } from 'react';
-import './button.css';
+import { FC, HTMLAttributes } from 'react';
+import './button.module.css';
 
-interface Props {
+interface Props extends HTMLAttributes<HTMLButtonElement> {
 	text: string;
 	className?: string;
 };

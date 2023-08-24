@@ -13,7 +13,7 @@ const ProductCard: FC<ProductProps> = ({image, title, description, price}): JSX.
 		<div >
 			<Title>ProductCard</Title>
 			<div className="card">
-				<Container>
+				<Container style={{display: "flex", justifyContent: "space-between", width: "95%"}}>
 					<img 
 						className="card-image" 
 						src={image} 

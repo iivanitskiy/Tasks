@@ -22,8 +22,7 @@ const Modal: FC<Props> = ({title, visible, onClose, children}): JSX.Element | nu
     <div className={modalClass.join(' ')} onClick={onClose} aria-hidden="true">
       <div className={modalContentClass} onClick={(e) => e.stopPropagation()} aria-hidden="true">
         <img className={closeIconClass} src={closeIcon} alt="closeIcon" onClick={onClose} aria-hidden="true"/>
-        <h2 style={{color: "black"}}>{title}
-        </h2>
+        <h2 style={{color: "black", margin: "0 0 10px 0"}}>{title}</h2>
         {children}
       </div>
     </div>
